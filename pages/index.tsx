@@ -1,11 +1,75 @@
-import Head from 'next/head'
-import Image from 'next/image'
-import { Inter } from 'next/font/google'
-import styles from '@/styles/Home.module.css'
+import Head from "next/head";
+import Image from "next/image";
+import { Inter } from "next/font/google";
+import { getFirestore, collection, addDoc } from "firebase/firestore";
+import { useState } from "react";
+import { async } from "@firebase/util";
+import { app } from "@/service/firebase";
 
-const inter = Inter({ subsets: ['latin'] })
+const db = getFirestore(app);
+const collectionRef = collection(db, "house_info");
 
 export default function Home() {
+  const [postData, setPostData] = useState({
+    content_id: "",
+    started_at: "",
+    deadline_at: "",
+    location: "",
+    title: "",
+    description: "",
+    img: "",
+    price: "",
+    announcement: "",
+    url: "",
+    case1: {},
+    case2: {},
+  });
+  const [startedAt, setStartedAt] = useState("");
+  const [deadlineAt, setDeadlineAt] = useState("");
+
+  const handleInputChange = (e: any) => {
+    const { name, value } = e.target;
+    setPostData((prevState) => ({
+      ...prevState,
+      [name]: value,
+    }));
+  };
+
+  const handleStartedAtChange = (e: any) => {
+    const { value } = e.target;
+    setStartedAt(value);
+    setPostData((prevState) => ({ ...prevState, started_at: value }));
+  };
+
+  const handleDeadlineAtChange = (e: any) => {
+    const { value } = e.target;
+    setDeadlineAt(value);
+    setPostData((prevState) => ({ ...prevState, deadline_at: value }));
+  };
+
+  const handleAddPost = async () => {
+    try {
+      const docRef = await addDoc(collectionRef, postData);
+      console.log("Document written with ID: ", docRef.id);
+      setPostData({
+        content_id: "",
+        started_at: "",
+        deadline_at: "",
+        location: "",
+        title: "",
+        description: "",
+        img: "",
+        price: "",
+        announcement: "",
+        url: "",
+        case1: {},
+        case2: {},
+      });
+    } catch (e) {
+      console.error("Error adding document: ", e);
+    }
+  };
+
   return (
     <>
       <Head>
@@ -14,110 +78,54 @@ export default function Home() {
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <main className={styles.main}>
-        <div className={styles.description}>
-          <p>
-            Get started by editing&nbsp;
-            <code className={styles.code}>pages/index.tsx</code>
-          </p>
-          <div>
-            <a
-              href="https://vercel.com?utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              By{' '}
-              <Image
-                src="/vercel.svg"
-                alt="Vercel Logo"
-                className={styles.vercelLogo}
-                width={100}
-                height={24}
-                priority
-              />
-            </a>
-          </div>
-        </div>
+      <div>
+        <label htmlFor="started_at">content_id:</label>
+        <input
+          type="text"
+          name="content_id"
+          value={postData.content_id}
+          onChange={handleInputChange}
+        />
+        <label htmlFor="started_at">location:</label>
+        <input
+          type="text"
+          name="location"
+          value={postData.location}
+          onChange={handleInputChange}
+        />
+        <label htmlFor="started_at">title:</label>
+        <input
+          type="text"
+          name="title"
+          value={postData.title}
+          onChange={handleInputChange}
+        />
+        <label htmlFor="started_at">description:</label>
+        <input
+          type="text"
+          name="description"
+          value={postData.description}
+          onChange={handleInputChange}
+        />
+        <label htmlFor="started_at">Started at:</label>
+        <input
+          type="datetime-local"
+          id="started_at"
+          name="started_at"
+          value={startedAt}
+          onChange={handleStartedAtChange}
+        />
+        <label htmlFor="deadline_at">Deadline at:</label>
+        <input
+          type="datetime-local"
+          id="deadline_at"
+          name="deadline_at"
+          value={deadlineAt}
+          onChange={handleDeadlineAtChange}
+        />
 
-        <div className={styles.center}>
-          <Image
-            className={styles.logo}
-            src="/next.svg"
-            alt="Next.js Logo"
-            width={180}
-            height={37}
-            priority
-          />
-          <div className={styles.thirteen}>
-            <Image
-              src="/thirteen.svg"
-              alt="13"
-              width={40}
-              height={31}
-              priority
-            />
-          </div>
-        </div>
-
-        <div className={styles.grid}>
-          <a
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app"
-            className={styles.card}
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <h2 className={inter.className}>
-              Docs <span>-&gt;</span>
-            </h2>
-            <p className={inter.className}>
-              Find in-depth information about Next.js features and&nbsp;API.
-            </p>
-          </a>
-
-          <a
-            href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app"
-            className={styles.card}
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <h2 className={inter.className}>
-              Learn <span>-&gt;</span>
-            </h2>
-            <p className={inter.className}>
-              Learn about Next.js in an interactive course with&nbsp;quizzes!
-            </p>
-          </a>
-
-          <a
-            href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app"
-            className={styles.card}
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <h2 className={inter.className}>
-              Templates <span>-&gt;</span>
-            </h2>
-            <p className={inter.className}>
-              Discover and deploy boilerplate example Next.js&nbsp;projects.
-            </p>
-          </a>
-
-          <a
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app"
-            className={styles.card}
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <h2 className={inter.className}>
-              Deploy <span>-&gt;</span>
-            </h2>
-            <p className={inter.className}>
-              Instantly deploy your Next.js site to a shareable URL
-              with&nbsp;Vercel.
-            </p>
-          </a>
-        </div>
-      </main>
+        <button onClick={handleAddPost}>Add Post</button>
+      </div>
     </>
-  )
+  );
 }
