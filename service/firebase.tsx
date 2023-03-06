@@ -1,5 +1,6 @@
-import { initializeApp } from "firebase/app";
-import { getAnalytics } from "firebase/analytics";
+import {initializeApp} from "firebase/app";
+import {getAnalytics} from "firebase/analytics";
+import {getAuth} from "firebase/auth";
 
 const firebaseConfig = {
   apiKey: process.env.NEXT_PUBLIC_API_KEY,
@@ -12,10 +13,11 @@ const firebaseConfig = {
 };
 
 const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
 let analytics: any;
 
 if (typeof window !== "undefined") {
   analytics = getAnalytics(app);
 }
 
-export { analytics, firebaseConfig, app };
+export {analytics, firebaseConfig, app, auth};

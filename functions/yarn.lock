@@ -1332,7 +1332,7 @@ find-up@^5.0.0:
 
 firebase-admin@^11.5.0:
   version "11.5.0"
-  resolved "https://registry.npmjs.org/firebase-admin/-/firebase-admin-11.5.0.tgz"
+  resolved "https://registry.yarnpkg.com/firebase-admin/-/firebase-admin-11.5.0.tgz#86aa97e45fd9868be1759dccf04614c488945093"
   integrity sha512-bBdlYtNvXx8yZGdCd00NrfZl1o1A0aXOw5h8q5PwC8RXikOLNXq8vYtSKW44dj8zIaafVP6jFdcUXZem/LMsHA==
   dependencies:
     "@fastify/busboy" "^1.1.0"

@@ -1,6 +1,9 @@
+import Nav from "@/Components/Nav";
+import TabBar from "@/Components/TabBar";
 import "@/styles/globals.css";
-import type { AppProps } from "next/app";
-import { useEffect } from "react";
+import type {AppProps} from "next/app";
+import {useEffect} from "react";
+import styles from "../styles/Home.module.css";
 
 declare global {
   interface Window {
@@ -8,7 +11,7 @@ declare global {
   }
 }
 
-export default function App({ Component, pageProps }: AppProps) {
+export default function App({Component, pageProps}: AppProps) {
   useEffect(() => {
     try {
       if (!window.Kakao.isInitialized()) {
@@ -20,8 +23,12 @@ export default function App({ Component, pageProps }: AppProps) {
   }, []);
 
   return (
-    <>
-      <Component {...pageProps} />
-    </>
+    <div className={styles.container}>
+      <div className={styles.main}>
+        <Nav />
+        <Component {...pageProps} />
+        <TabBar />
+      </div>
+    </div>
   );
 }
