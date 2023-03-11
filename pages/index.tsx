@@ -1,6 +1,7 @@
-import HomeNav from "@/Components/HomeNav";
+import HomeNav from "@/Components/Nav/HomeNav";
 import Head from "next/head";
 import Image from "next/image";
+import Link from "next/link";
 import styles from "../styles/Index.module.css";
 
 export default function Home() {
@@ -21,15 +22,25 @@ export default function Home() {
             </div>
 
             <ul className="space-y-4 h-full w-full">
-              <li className="rounded-xl border border-none bg-[#F2F4F6] h-160 flex items-center">
-                <div className="rounded-lg w-24 h-32 bg-[#15AA2C] m-4 "></div>
-                <div className="flex flex-col justify-start">
-                  <p className="text-xl font-bold">당첨 확률</p>
-                  <p className="text-base">서울시 마포구 동교로 64-5</p>
-                  <p className="text-base">보증금 1억 2천</p>
-                  <p className="text-base">월세 15만원</p>
-                </div>
-              </li>
+              <Link href={"detail/2"}>
+                <li className="rounded-xl border border-none bg-[#F2F4F6] h-160 flex items-center">
+                  <div className="rounded-lg w-24 h-32 bg-[#15AA2C] m-4 ">
+                    <div className="flex flex-col justify-center items-center h-full">
+                      <p className="font-semibold text-sm text-gray-200">
+                        마감일
+                      </p>
+                      <p className="font-semibold text-3xl text-white">3월</p>
+                      <p className="font-semibold text-3xl text-white">20일</p>
+                    </div>
+                  </div>
+                  <div className="flex flex-col justify-start">
+                    <p className="text-xl font-bold">당첨 확률</p>
+                    <p className="text-base">서울시 마포구 동교로 64-5</p>
+                    <p className="text-base">보증금 1억 2천</p>
+                    <p className="text-base">월세 15만원</p>
+                  </div>
+                </li>
+              </Link>
             </ul>
           </div>
         </div>

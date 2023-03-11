@@ -6,7 +6,10 @@ import {useEffect, useRef, useState} from "react";
 import styles from "../styles/Home.module.css";
 
 export default function App({Component, pageProps}: AppProps) {
-  const shouldRenderTabBar = useRouter().pathname !== "/detail/[id]";
+  const router = useRouter();
+
+  const shouldRenderTabBar =
+    router.pathname !== "/detail/[id]" && router.pathname !== "/notification";
 
   useEffect(() => {
     // try {

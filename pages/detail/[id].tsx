@@ -1,18 +1,29 @@
 import React from "react";
-import DetailNav from "@/Components/DetailNav";
+import DetailNav from "@/Components/Nav/DetailNav";
 
 const Detail = () => {
+  const percent = 80;
   return (
     <>
       <DetailNav />
       <div className="w-[88%] m-auto">
         <div className="my-9 space-y-0.5">
-          <div className="text-xl font-bold">기간을 확인해요 &nbsp;😁</div>
-          <div className="text-xl font-medium">03/05 ~ 03/55</div>
+          <div className="text-xl font-bold">신청 기간</div>
+          <div className="text-xl text-gray-600 font-medium">
+            03월 5일 ~ 03월 12일
+          </div>
         </div>
         <div className="mb-9">
-          <div>당첨 확률</div>
-          <div>progress bar</div>
+          <div className="text-xl font-bold mb-2">당첨 확률</div>
+          <div className="relative w-full h-4 bg-gray-300 rounded-full overflow-hidden">
+            <div
+              className="absolute rounded-full inset-0 bg-green-500"
+              style={{width: `${percent}%`}}
+            ></div>
+            <div className="absolute inset-0 text-gray-600 text-center flex items-center justify-center">
+              {percent}%
+            </div>
+          </div>
         </div>
       </div>
       <p className=" w-full h-[16px] bg-[#F2F4F6]"></p>
@@ -38,7 +49,8 @@ const Detail = () => {
       </div>
       <p className=" w-full h-[16px] bg-[#F2F4F6]"></p>
       <div className="w-[88%] m-auto">
-        <div className="my-9 space-y-0.5">상세 페이지</div>
+        <div className="my-9 space-y-0.5"></div>
+        <div className="font-semibold text-xl">공고 일정</div>
       </div>
     </>
   );
