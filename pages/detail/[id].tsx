@@ -10,7 +10,7 @@ const Detail = () => {
         <div className="my-9 space-y-0.5">
           <div className="text-xl font-bold">신청 기간</div>
           <div className="text-xl text-gray-600 font-medium">
-            03월 5일 ~ 03월 12일
+            03월 5일 00시 ~ 03월 12일 00시
           </div>
         </div>
         <div className="mb-9">

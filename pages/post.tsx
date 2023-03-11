@@ -1,6 +1,4 @@
 import Head from "next/head";
-import Image from "next/image";
-import {Inter} from "next/font/google";
 import {getFirestore, collection, addDoc} from "firebase/firestore";
 import {useState} from "react";
 import {async} from "@firebase/util";
@@ -11,27 +9,27 @@ const collectionRef = collection(db, "house_info");
 
 export default function Home() {
   const [postData, setPostData] = useState({
-    content_id: "",
+    created_at: new Date(),
     started_at: "",
     deadline_at: "",
-    location: "",
-    title: "",
-    description: "",
-    img: "",
-    price: "",
-    announcement: "",
+    address: "",
+    category: "",
+    deposit: 0,
+    rent: 0,
+    area: 0,
     url: "",
-    case1: {},
-    case2: {},
+    detail: [],
   });
   const [startedAt, setStartedAt] = useState("");
   const [deadlineAt, setDeadlineAt] = useState("");
 
   const handleInputChange = (e: any) => {
     const {name, value} = e.target;
+
+    const newValue = name === "detail" ? value.split("\n") : value;
     setPostData((prevState) => ({
       ...prevState,
-      [name]: value,
+      [name]: newValue,
     }));
   };
 
@@ -49,21 +47,17 @@ export default function Home() {
 
   const handleAddPost = async () => {
     try {
-      const docRef = await addDoc(collectionRef, postData);
-      console.log("Document written with ID: ", docRef.id);
       setPostData({
-        content_id: "",
+        created_at: new Date(),
         started_at: "",
         deadline_at: "",
-        location: "",
-        title: "",
-        description: "",
-        img: "",
-        price: "",
-        announcement: "",
+        address: "",
+        category: "",
+        deposit: 0,
+        rent: 0,
+        area: 0,
         url: "",
-        case1: {},
-        case2: {},
+        detail: [],
       });
     } catch (e) {
       console.error("Error adding document: ", e);
@@ -78,53 +72,122 @@ export default function Home() {
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <div>
-        <label htmlFor="started_at">content_id:</label>
-        <input
-          type="text"
-          name="content_id"
-          value={postData.content_id}
-          onChange={handleInputChange}
-        />
-        <label htmlFor="started_at">location:</label>
-        <input
-          type="text"
-          name="location"
-          value={postData.location}
-          onChange={handleInputChange}
-        />
-        <label htmlFor="started_at">title:</label>
-        <input
-          type="text"
-          name="title"
-          value={postData.title}
-          onChange={handleInputChange}
-        />
-        <label htmlFor="started_at">description:</label>
-        <input
-          type="text"
-          name="description"
-          value={postData.description}
-          onChange={handleInputChange}
-        />
-        <label htmlFor="started_at">Started at:</label>
-        <input
-          type="datetime-local"
-          id="started_at"
-          name="started_at"
-          value={startedAt}
-          onChange={handleStartedAtChange}
-        />
-        <label htmlFor="deadline_at">Deadline at:</label>
-        <input
-          type="datetime-local"
-          id="deadline_at"
-          name="deadline_at"
-          value={deadlineAt}
-          onChange={handleDeadlineAtChange}
-        />
-
-        <button onClick={handleAddPost}>Add Post</button>
+      <div className="flex flex-col space-y-4">
+        <div>
+          <label htmlFor="address" className="block font-medium mb-1">
+            Address:
+          </label>
+          <input
+            type="text"
+            name="address"
+            value={postData.address}
+            onChange={handleInputChange}
+            className="w-full border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
+          />
+        </div>
+        <div>
+          <label htmlFor="category" className="block font-medium mb-1">
+            Category:
+          </label>
+          <input
+            type="text"
+            name="category"
+            value={postData.category}
+            onChange={handleInputChange}
+            className="w-full border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
+          />
+        </div>
+        <div>
+          <label htmlFor="depoit" className="block font-medium mb-1">
+            Deposit:
+          </label>
+          <input
+            type="text"
+            name="deposit"
+            value={postData.deposit}
+            onChange={handleInputChange}
+            className="w-full border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
+          />
+        </div>
+        <div>
+          <label htmlFor="rent" className="block font-medium mb-1">
+            Rent:
+          </label>
+          <input
+            type="text"
+            name="rent"
+            value={postData.rent}
+            onChange={handleInputChange}
+            className="w-full border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
+          />
+        </div>
+        <div>
+          <label htmlFor="area" className="block font-medium mb-1">
+            Area:
+          </label>
+          <input
+            type="text"
+            name="area"
+            value={postData.area}
+            onChange={handleInputChange}
+            className="w-full border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
+          />
+        </div>
+        <div>
+          <label htmlFor="url" className="block font-medium mb-1">
+            URL:
+          </label>
+          <input
+            type="text"
+            name="url"
+            value={postData.url}
+            onChange={handleInputChange}
+            className="w-full border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
+          />
+        </div>
+        <div>
+          <label htmlFor="detail" className="block font-medium mb-1">
+            Detail:
+          </label>
+          <textarea
+            name="detail"
+            value={postData.detail.join("\n")}
+            onChange={handleInputChange}
+            className="w-full border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
+          ></textarea>
+        </div>
+        <div>
+          <label htmlFor="started_at" className="block font-medium mb-1">
+            Started at:
+          </label>
+          <input
+            type="datetime-local"
+            id="started_at"
+            name="started_at"
+            value={startedAt}
+            onChange={handleStartedAtChange}
+            className="w-full border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
+          />
+        </div>
+        <div>
+          <label htmlFor="deadline_at" className="block font-medium mb-1">
+            Deadline at:
+          </label>
+          <input
+            type="datetime-local"
+            id="deadline_at"
+            name="deadline_at"
+            value={deadlineAt}
+            onChange={handleDeadlineAtChange}
+            className="w-full border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
+          />
+        </div>
+        <button
+          onClick={handleAddPost}
+          className="bg-indigo-500 text-white py-2 px-4 rounded hover:bg-indigo-600 focus:outline-none focus:ring-2 focus:ring-indigo-600 focus:ring-opacity-50"
+        >
+          Add Post
+        </button>
       </div>
     </>
   );
