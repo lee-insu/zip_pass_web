@@ -18,7 +18,8 @@ export default function Home() {
     rent: 0,
     area: 0,
     url: "",
-    detail: [],
+    exposure: true,
+    detail: "",
   });
   const [startedAt, setStartedAt] = useState("");
   const [deadlineAt, setDeadlineAt] = useState("");
@@ -46,6 +47,7 @@ export default function Home() {
   };
 
   const handleAddPost = async () => {
+    await addDoc(collectionRef, postData);
     try {
       setPostData({
         created_at: new Date(),
@@ -57,7 +59,8 @@ export default function Home() {
         rent: 0,
         area: 0,
         url: "",
-        detail: [],
+        exposure: true,
+        detail: "",
       });
     } catch (e) {
       console.error("Error adding document: ", e);
@@ -151,7 +154,7 @@ export default function Home() {
           </label>
           <textarea
             name="detail"
-            value={postData.detail.join("\n")}
+            value={postData.detail}
             onChange={handleInputChange}
             className="w-full border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
           ></textarea>

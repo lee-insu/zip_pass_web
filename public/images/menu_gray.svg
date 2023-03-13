@@ -1,0 +1,11 @@
+<svg id="구성_요소_22_2" data-name="구성 요소 22 – 2" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+  <rect id="사각형_452" data-name="사각형 452" width="24" height="24" fill="#f0f5f1" opacity="0"/>
+  <g id="그룹_262" data-name="그룹 262" transform="translate(-563 -1208)">
+    <g id="그룹_221" data-name="그룹 221" transform="translate(-65)">
+      <circle id="타원_32" data-name="타원 32" cx="3" cy="3" r="3" transform="translate(642 1212)" fill="none" stroke="#c8ccc9" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"/>
+      <circle id="타원_33" data-name="타원 33" cx="3" cy="3" r="3" transform="translate(632 1222)" fill="none" stroke="#c8ccc9" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"/>
+      <rect id="사각형_441" data-name="사각형 441" width="6" height="6" rx="1.2" transform="translate(642 1222)" fill="none" stroke="#c8ccc9" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"/>
+      <rect id="사각형_442" data-name="사각형 442" width="6" height="6" rx="1.2" transform="translate(632 1212)" fill="none" stroke="#c8ccc9" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"/>
+    </g>
+  </g>
+</svg>

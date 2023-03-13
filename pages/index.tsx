@@ -4,19 +4,18 @@ import Image from "next/image";
 import Link from "next/link";
 import styles from "../styles/Index.module.css";
 import {IndexInfo} from "@/types";
-import {getFirestore, collection, getDocs, Timestamp} from "firebase/firestore";
+import {
+  getFirestore,
+  collection,
+  getDocs,
+  Timestamp,
+  query,
+  where,
+} from "firebase/firestore";
 import {app} from "@/service/firebase";
 import {useEffect, useState} from "react";
-
-const dateFormatter = (date: Date) => {
-  const dateType = new Date(date);
-  const month = dateType.getMonth() + 1;
-  const day = dateType.getDate();
-  return {
-    month: month,
-    day: day,
-  };
-};
+import convertToMoneyFormat from "@/utils/moneyFormat";
+import dateFormatter from "@/utils/dateFormat";
 
 const getGuFormAddress = (address: string) => {
   const guIndex = address.indexOf("구");
@@ -24,6 +23,8 @@ const getGuFormAddress = (address: string) => {
 
   if (guIndex === -1) {
     return null;
+  } else if (guIndex === 4) {
+    return "서울시 구로구";
   }
 
   if (seoulIndex === -1) {
@@ -31,25 +32,6 @@ const getGuFormAddress = (address: string) => {
   }
 
   return address.substring(seoulIndex, guIndex + 1);
-};
-
-const convertToMoneyFormat = (num: number): string => {
-  const quotient = Math.floor(num / 100000000);
-  const remainder = num % 100000000;
-
-  let result = "";
-
-  if (quotient > 0) {
-    result += `${quotient}억 `;
-  }
-
-  const tenThousandRemainder = Math.floor(remainder / 10000);
-
-  if (tenThousandRemainder > 0) {
-    result += `${tenThousandRemainder}만 `;
-  }
-
-  return result.trim();
 };
 
 export default function Home() {
@@ -60,26 +42,33 @@ export default function Home() {
     const collectionRef = collection(db, "house_info");
 
     const fetchData = async () => {
-      const querySnapshot = await getDocs(collectionRef);
+      const q = query(collectionRef, where("exposure", "==", true));
+      const querySnapshot = await getDocs(q);
+      const newPosts: IndexInfo[] = querySnapshot.docs
+        .map((doc) => {
+          const data = doc.data();
 
-      const newPosts: IndexInfo[] = querySnapshot.docs.map((doc) => {
-        const data = doc.data();
+          const deadlineAt =
+            data.deadline_at instanceof Timestamp
+              ? data.deadline_at.toDate()
+              : new Date(data.deadline_at);
 
-        const deadlineAt =
-          data.deadline_at instanceof Timestamp
-            ? data.deadline_at.toDate()
-            : new Date(data.deadline_at);
-
-        return {
-          id: doc.id,
-          deadline_at: data.deadline_at,
-          address: data.address,
-          category: data.category,
-          deposit: data.deposit,
-          rent: data.rent,
-          area: data.rent,
-        };
-      });
+          return {
+            id: doc.id,
+            deadline_at: deadlineAt,
+            address: data.address,
+            category: data.category,
+            deposit: data.deposit,
+            rent: data.rent,
+            area: data.area,
+            exposure: data.exposure,
+          };
+        })
+        .sort(
+          (a, b) =>
+            new Date(a.deadline_at).getTime() -
+            new Date(b.deadline_at).getTime()
+        );
 
       setPosts(newPosts);
     };
@@ -107,14 +96,13 @@ export default function Home() {
               {posts.map((post) => (
                 <li key={post.id}>
                   <Link
-                    className="rounded-xl border border-none bg-[#F2F4F6] h-160 flex items-center"
+                    className="rounded-xl border-gray-100  bg-white drop-shadow-md
+                    h-160 flex items-center"
                     href={`detail/${post.id}`}
                   >
-                    <div className="rounded-lg w-24 h-32 bg-[#15AA2C] m-4 ">
+                    <div className="rounded-lg w-24 h-32 bg-[#1F2526] m-4 ">
                       <div className="flex flex-col justify-center items-center h-full">
-                        <p className="font-semibold text-sm text-gray-200">
-                          마감일
-                        </p>
+                        <p className="font-medium text-sm text-white">마감일</p>
                         <p className="font-semibold text-3xl text-white">
                           {dateFormatter(post.deadline_at).month}월
                         </p>
@@ -124,18 +112,22 @@ export default function Home() {
                       </div>
                     </div>
                     <div className="flex flex-col justify-start">
-                      <p className="text-xl font-bold">당첨 확률</p>
+                      <p className="text-xl font-bold text-[#1BC378]">
+                        당첨 확률
+                      </p>
                       <div className="pt-1.5">
-                        <p className="text-base">
+                        <p className="text-base text-[#526466]">
                           {getGuFormAddress(post.address)}
                         </p>
-                        <p className="text-base">
+                        <p className="text-base text-[#526466]">
                           보증금 {convertToMoneyFormat(post.deposit)}원
                         </p>
-                        <p className="text-base">
+                        <p className="text-base text-[#526466]">
                           월세 {convertToMoneyFormat(post.rent)}원
                         </p>
-                        <p className="text-gray-500 text-sm">{post.category}</p>
+                        <p className="text-[#526466] text-sm">
+                          {post.category}
+                        </p>
                       </div>
                     </div>
                   </Link>

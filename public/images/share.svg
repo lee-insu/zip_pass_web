@@ -1,0 +1,11 @@
+<svg id="구성_요소_23_2" data-name="구성 요소 23 – 2" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+  <rect id="사각형_453" data-name="사각형 453" width="24" height="24" fill="#f0f5f1" opacity="0"/>
+  <g id="그룹_263" data-name="그룹 263" transform="translate(-604 -1206.001)">
+    <g id="그룹_222" data-name="그룹 222" transform="translate(-74 -2)">
+      <path id="패스_215" data-name="패스 215" d="M305,5a2,2,0,1,1,.272,1.008A2,2,0,0,1,305,5Z" transform="translate(389 1208)" fill="none" stroke="#1f2526" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"/>
+      <path id="패스_216" data-name="패스 216" d="M305,19a1.991,1.991,0,1,1,0,.018Z" transform="translate(389 1208)" fill="none" stroke="#1f2526" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"/>
+      <circle id="타원_31" data-name="타원 31" cx="2" cy="2" r="2" transform="translate(682 1218)" fill="none" stroke="#1f2526" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"/>
+      <path id="패스_217" data-name="패스 217" d="M305.272,6.008l-8.544,4.984m0,2.016,8.544,4.984" transform="translate(389 1208)" fill="none" stroke="#1f2526" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"/>
+    </g>
+  </g>
+</svg>

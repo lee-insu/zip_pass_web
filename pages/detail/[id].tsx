@@ -1,17 +1,49 @@
-import React from "react";
+import React, {use, useState} from "react";
+import {GetServerSideProps} from "next";
 import DetailNav from "@/Components/Nav/DetailNav";
+import {
+  collection,
+  getDocs,
+  getFirestore,
+  doc,
+  getDoc,
+} from "firebase/firestore";
+import {app} from "@/service/firebase";
+import {DetailInfo} from "@/types";
+import convertToMoneyFormat from "@/utils/moneyFormat";
+import exchangeArea from "@/utils/exchangeArea";
+import dateFormatter from "@/utils/dateFormat";
 
-const Detail = () => {
+interface DetailProps {
+  NoticeData: DetailInfo;
+}
+
+const Detail = ({NoticeData}: DetailProps) => {
   const percent = 80;
+
+  const timeFormat = (date: string) => {
+    const DateInfo = new Date(date);
+    const year = dateFormatter(DateInfo).year;
+    const month = dateFormatter(DateInfo).month;
+    const day = dateFormatter(DateInfo).day;
+    const hours = dateFormatter(DateInfo).hours;
+    const timeform = dateFormatter(DateInfo).timeFormat;
+
+    return `${month}월 ${day}일 ${timeform} ${hours}시`;
+  };
+
   return (
     <>
       <DetailNav />
       <div className="w-[88%] m-auto">
-        <div className="my-9 space-y-0.5">
-          <div className="text-xl font-bold">신청 기간</div>
-          <div className="text-xl text-gray-600 font-medium">
-            03월 5일 00시 ~ 03월 12일 00시
-          </div>
+        <div className="my-9">
+          <div className="text-xl font-bold mb-3">신청 기간</div>
+          <p className="text-xl text-gray-600 font-medium mb-0.5">
+            {timeFormat(NoticeData.started_at)} ~
+          </p>
+          <p className="text-xl text-gray-600 font-medium">
+            {timeFormat(NoticeData.deadline_at)}
+          </p>
         </div>
         <div className="mb-9">
           <div className="text-xl font-bold mb-2">당첨 확률</div>
@@ -29,21 +61,27 @@ const Detail = () => {
       <p className=" w-full h-[16px] bg-[#F2F4F6]"></p>
       <div className="w-[88%] m-auto">
         <ul className="w-full h-full ">
-          <li className="border-b border-gray-200 w-full h-20 flex items-center space-x-4">
-            <p className="">주소</p>
-            <p>서울시 마포구 동교로 64-5</p>
+          <li className="relative border-b border-gray-200 w-full h-20 flex items-center space-x-4">
+            <p>주소</p>
+            <p className="absolute left-12">{NoticeData.address}</p>
           </li>
-          <li className="border-b border-gray-200 w-full h-20 flex items-center space-x-4">
+          <li className="relative border-b border-gray-200 w-full h-20 flex items-center space-x-4">
             <p>보증금</p>
-            <p>1억 2천</p>
+            <p className="absolute left-12">
+              {convertToMoneyFormat(NoticeData.deposit)}원
+            </p>
           </li>
-          <li className="border-b border-gray-200 w-full h-20 flex items-center space-x-4">
+          <li className="relative border-b border-gray-200 w-full h-20 flex items-center space-x-4">
             <p>월세</p>
-            <p>15만원</p>
+            <p className="absolute left-12">
+              {convertToMoneyFormat(NoticeData.rent)}원
+            </p>
           </li>
-          <li className="border-b border-gray-200 w-full h-20 flex items-center space-x-4">
+          <li className="relative border-b border-gray-200 w-full h-20 flex items-center space-x-4">
             <p>평수</p>
-            <p>15평</p>
+            <p className="absolute left-12">
+              {exchangeArea(NoticeData.area)}평
+            </p>
           </li>
         </ul>
       </div>
@@ -51,9 +89,44 @@ const Detail = () => {
       <div className="w-[88%] m-auto">
         <div className="my-9 space-y-0.5"></div>
         <div className="font-semibold text-xl">공고 일정</div>
+        <div>{NoticeData.detail}</div>
       </div>
     </>
   );
 };
 
 export default Detail;
+
+export const getServerSideProps: GetServerSideProps<DetailProps> = async (
+  context
+) => {
+  const id = context.params?.id as string;
+
+  const firestore = getFirestore(app);
+  const houseInfoRef = doc(firestore, "house_info", id);
+  const docSnap = await getDoc(houseInfoRef);
+
+  if (!docSnap.exists()) {
+    return {
+      notFound: true,
+    };
+  }
+
+  const detailInfo = docSnap.data() as DetailInfo;
+
+  let NoticeData: DetailInfo = {
+    started_at: detailInfo.started_at.toString(),
+    deadline_at: detailInfo.deadline_at.toString(),
+    address: detailInfo.address,
+    category: detailInfo.category,
+    deposit: detailInfo.deposit,
+    rent: detailInfo.rent,
+    area: detailInfo.area,
+    url: detailInfo.url,
+    detail: detailInfo.detail,
+  };
+
+  return {
+    props: {NoticeData},
+  };
+};

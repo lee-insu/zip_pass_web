@@ -1,0 +1,62 @@
+         <svg
+            id="구성_요소_24_3"
+            data-name="구성 요소 24 – 3"
+            xmlns="http://www.w3.org/2000/svg"
+            width="24"
+            height="24"
+            viewBox="0 0 24 24"
+          >
+            <rect
+              id="사각형_454"
+              data-name="사각형 454"
+              width="24"
+              height="24"
+              fill="#f0f5f1"
+              opacity="0"
+            />
+            <g
+              id="그룹_264"
+              data-name="그룹 264"
+              transform="translate(-654 -1206)"
+            >
+              <g
+                id="그룹_223"
+                data-name="그룹 223"
+                transform="translate(-74 -2)"
+              >
+                <path
+                  id="패스_223"
+                  data-name="패스 223"
+                  d="M345,19V10a6,6,0,0,1,12,0v9m-12,0h12m-12,0h-2m14,0h2"
+                  transform="translate(389 1208)"
+                  fill="none"
+                  stroke="#1f2526"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                />
+                <line
+                  id="선_4"
+                  data-name="선 4"
+                  x2="2"
+                  transform="translate(739 1230)"
+                  fill="none"
+                  stroke="#1f2526"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                />
+                <circle
+                  id="타원_34"
+                  data-name="타원 34"
+                  cx="1"
+                  cy="1"
+                  r="1"
+                  transform="translate(739 1210)"
+                  fill="none"
+                  stroke="#1f2526"
+                  stroke-width="2"
+                />
+              </g>
+            </g>
+          </svg>
