@@ -1,4 +1,4 @@
-import React, {use, useState} from "react";
+import React, {use, useRef, useState} from "react";
 import {GetServerSideProps} from "next";
 import DetailNav from "@/Components/Nav/DetailNav";
 import {
@@ -13,12 +13,21 @@ import {DetailInfo} from "@/types";
 import convertToMoneyFormat from "@/utils/moneyFormat";
 import exchangeArea from "@/utils/exchangeArea";
 import dateFormatter from "@/utils/dateFormat";
+import {Viewer} from "@toast-ui/react-editor";
+import "@toast-ui/editor/dist/toastui-editor-viewer.css";
+import dynamic from "next/dynamic";
 
 interface DetailProps {
   NoticeData: DetailInfo;
 }
 
 const Detail = ({NoticeData}: DetailProps) => {
+  const Viewer = dynamic(
+    () => import("@toast-ui/react-editor").then((mod) => mod.Viewer),
+    {
+      ssr: false,
+    }
+  );
   const percent = 80;
 
   const timeFormat = (date: string) => {
@@ -88,8 +97,7 @@ const Detail = ({NoticeData}: DetailProps) => {
       <p className=" w-full h-[16px] bg-[#F2F4F6]"></p>
       <div className="w-[88%] m-auto">
         <div className="my-9 space-y-0.5"></div>
-        <div className="font-semibold text-xl">공고 일정</div>
-        <div>{NoticeData.detail}</div>
+        <Viewer initialValue={NoticeData.detail || " "} />
       </div>
     </>
   );
