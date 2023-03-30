@@ -13,15 +13,18 @@ import {DetailInfo} from "@/types";
 import convertToMoneyFormat from "@/utils/moneyFormat";
 import exchangeArea from "@/utils/exchangeArea";
 import dateFormatter from "@/utils/dateFormat";
-import {Viewer} from "@toast-ui/react-editor";
 import "@toast-ui/editor/dist/toastui-editor-viewer.css";
 import dynamic from "next/dynamic";
+import {useSelector} from "react-redux";
+import {RootState} from "@/store/store";
 
 interface DetailProps {
   NoticeData: DetailInfo;
 }
 
 const Detail = ({NoticeData}: DetailProps) => {
+  const isLoggedIn = useSelector((state: RootState) => state.user);
+  console.log(isLoggedIn);
   const Viewer = dynamic(
     () => import("@toast-ui/react-editor").then((mod) => mod.Viewer),
     {

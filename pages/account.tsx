@@ -1,8 +1,27 @@
 import AccountNav from "@/Components/Nav/AccountNav";
 import Image from "next/image";
 import React from "react";
+import {useDispatch} from "react-redux";
+import {login, logout} from "@/store/userSlice";
+import {auth} from "@/service/firebase";
+import {GoogleAuthProvider, signInWithPopup, signOut} from "firebase/auth";
+import {useSelector} from "react-redux";
+import {RootState} from "../store/store";
+import Link from "next/link";
 
 const Account = () => {
+  const dispatch = useDispatch();
+  const isLoggedIn = useSelector((state: RootState) => state.user.isLoggedIn);
+
+  const signOutUser = async () => {
+    try {
+      await signOut(auth);
+      dispatch(logout());
+    } catch (error) {
+      console.log("done");
+    }
+  };
+
   return (
     <>
       <AccountNav />
@@ -73,9 +92,23 @@ const Account = () => {
           <div className="text-xl font-semibold text-gray-800">계정</div>
         </div>
         <ul className="space-y-8 h-full w-full">
-          <li className="flex justify-between text-lg font-medium text-gray-500">
-            <p>로그아웃</p>
-          </li>
+          {isLoggedIn ? (
+            <li
+              onClick={signOutUser}
+              className="flex justify-between text-lg font-medium text-gray-500"
+            >
+              <p>로그아웃</p>
+            </li>
+          ) : (
+            <li>
+              <Link
+                className="flex justify-between text-lg font-medium text-gray-500"
+                href={"/auth"}
+              >
+                <p>로그인</p>
+              </Link>
+            </li>
+          )}
         </ul>
       </div>
     </>

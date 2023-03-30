@@ -3,12 +3,12 @@ import "@/styles/globals.css";
 import Head from "next/head";
 import type {AppProps} from "next/app";
 import {useRouter} from "next/router";
-import {useEffect, useRef, useState} from "react";
+import {Provider} from "react-redux";
+import {store} from "../store/store";
 import styles from "../styles/Home.module.css";
 
 export default function App({Component, pageProps}: AppProps) {
   const router = useRouter();
-
   const shouldRenderTabBar =
     router.pathname !== "/detail/[id]" && router.pathname !== "/notification";
 
@@ -23,14 +23,16 @@ export default function App({Component, pageProps}: AppProps) {
           defer
         ></script>
       </Head>
-      <div className={styles.container}>
-        <div className={styles.main}>
-          <div className={styles.content}>
-            <Component {...pageProps} />
+      <Provider store={store}>
+        <div className={styles.container}>
+          <div className={styles.main}>
+            <div className={styles.content}>
+              <Component {...pageProps} />
+            </div>
+            {shouldRenderTabBar && <TabBar />}
           </div>
-          {shouldRenderTabBar && <TabBar />}
         </div>
-      </div>
+      </Provider>
     </>
   );
 }

@@ -20,3 +20,17 @@ export interface DetailInfo {
   url: string;
   detail: string;
 }
+
+export interface NotificationInfo {
+  id: string;
+  deadline_at: string;
+  address: string;
+  category: string;
+  deposit: number;
+  rent: number;
+  area: number;
+  title: string;
+  body: string;
+  pageId: string;
+  exposure: boolean;
+}

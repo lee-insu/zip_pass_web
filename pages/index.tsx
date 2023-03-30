@@ -16,7 +16,11 @@ import {app} from "@/service/firebase";
 import {useEffect, useState} from "react";
 import convertToMoneyFormat from "@/utils/moneyFormat";
 import dateFormatter from "@/utils/dateFormat";
-
+import {useDispatch, useSelector} from "react-redux";
+import {RootState} from "../store/store";
+import {onAuthStateChanged} from "firebase/auth";
+import {auth} from "@/service/firebase";
+import {login, logout} from "@/store/userSlice";
 const getGuFormAddress = (address: string) => {
   const guIndex = address.indexOf("구");
   const seoulIndex = address.indexOf("서울시");
@@ -36,6 +40,10 @@ const getGuFormAddress = (address: string) => {
 
 export default function Home() {
   const [posts, setPosts] = useState<IndexInfo[]>([]);
+  const dispatch = useDispatch();
+  const isLoggedIn = useSelector((state: RootState) => state.user);
+
+  console.log(isLoggedIn);
 
   useEffect(() => {
     const db = getFirestore(app);
@@ -74,7 +82,17 @@ export default function Home() {
     };
 
     fetchData();
-  }, []);
+    const unsubscribe = onAuthStateChanged(auth, (user) => {
+      if (user) {
+        dispatch(login(user));
+      } else {
+        dispatch(logout());
+      }
+    });
+    return () => {
+      unsubscribe();
+    };
+  }, [dispatch]);
 
   return (
     <>

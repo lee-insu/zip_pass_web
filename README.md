@@ -9,8 +9,24 @@ npm run dev
 # or
 yarn dev
 # or
-pnpm dev
-```
+pnpm dev"
+
+``` const router = useRouter();
+  const isLoggedIn = useSelector((state: RootState) => state.user.isLoggedIn);
+
+  useEffect(() => {
+    if (isLoggedIn) {
+      console.log("User is signed in");
+      // User is signed in, you can get user data like email, display name, etc.
+    } else {
+      console.log("User is signed out");
+      // No user is signed in, you can redirect to the login page if necessary.
+      if (router.pathname !== "/auth") {
+        router.push("/auth");
+      }
+    }
+  }, [isLoggedIn, router]);
+
 
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 

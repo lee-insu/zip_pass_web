@@ -9,6 +9,8 @@ import {UserRecord} from "firebase-admin/lib/auth/user-record";
 
 config();
 
+admin.initializeApp();
+
 interface TokenResponse {
   token_type: string;
   access_token: string;
@@ -65,16 +67,47 @@ const getKakaoUser = async (token: string): Promise<KakaoUser> => {
   return res.data;
 };
 
-app.post("/callback/kakao", async (req, res) => {
-  const {token} = req.body;
-  const kakaoUser = await getKakaoUser(token);
-  const authUser = await updateOrCreateUser(kakaoUser);
-  const firebaseToken = await admin
-    .auth()
-    .createCustomToken(authUser.uid, {provider: "KAKAO"});
+const saveProfileToDatabase = async (profile: KakaoUser) => {
+  const db = admin.firestore();
+  const userRef = db.collection("users").doc(`kakao:${profile.id}`);
 
-  res.status(200).json({firebaseToken});
+  const userData = {
+    uid: `kakao:${profile.id}`,
+    provider: "KAKAO",
+    displayName: profile.kakao_account?.profile?.nickname,
+    email: profile.kakao_account?.email,
+  };
+
+  await userRef.set(userData);
+};
+
+app.post("/api/auth/kakao", async (req, res) => {
+  const {code} = req.body;
+  if (!code) {
+    res.status(400).json({message: "Code is missing"});
+    return;
+  }
+
+  try {
+    const tokenResponse = await getToken(code);
+    const kakaoUser = await getKakaoUser(tokenResponse.access_token);
+    const authUser = await updateOrCreateUser(kakaoUser);
+    const firebaseToken = await admin
+      .auth()
+      .createCustomToken(authUser.uid, {provider: "KAKAO"});
+
+    // 사용자 정보를 데이터베이스에 저장합니다.
+    await saveProfileToDatabase(kakaoUser);
+
+    // 클라이언트에 Firebase 토큰과 함께 카카오 유저 정보를 전달합니다.
+    res.status(200).json({firebaseToken, kakaoUser});
+  } catch (error) {
+    console.error("Error in Kakao authentication:", error);
+    res.status(500).json({message: "Internal server error"});
+  }
 });
+
+// ...
 
 exports.auth = functions
   .runWith({secrets: ["SERVICE_ACCOUNT_KEY"]})

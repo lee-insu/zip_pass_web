@@ -40,10 +40,8 @@ const KakaoAuth = async (req: NextApiRequest, res: NextApiResponse) => {
 
     const profile = profileRes.data;
 
-    // 프로필 정보를 처리하고 사용자를 인증합니다.
-    // 예를 들어, 데이터베이스에 사용자 정보를 저장하거나 세션에 사용자 정보를 저장할 수 있습니다.
-
-    res.status(200).json({message: "Success", data: profile});
+    const {id, kakao_account} = profile;
+    res.status(200).json({id, kakao_account});
   } catch (error) {
     console.error("Kakao Auth Error:", error);
     res.status(500).json({message: "Internal server error"});
