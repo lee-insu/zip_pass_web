@@ -17,14 +17,14 @@ import "@toast-ui/editor/dist/toastui-editor-viewer.css";
 import dynamic from "next/dynamic";
 import {useSelector} from "react-redux";
 import {RootState} from "@/store/store";
+import {useAuth} from "@/hooks/useAuth";
 
 interface DetailProps {
   NoticeData: DetailInfo;
 }
 
 const Detail = ({NoticeData}: DetailProps) => {
-  const isLoggedIn = useSelector((state: RootState) => state.user);
-  console.log(isLoggedIn);
+  const {user, loading} = useAuth();
   const Viewer = dynamic(
     () => import("@toast-ui/react-editor").then((mod) => mod.Viewer),
     {
@@ -43,6 +43,10 @@ const Detail = ({NoticeData}: DetailProps) => {
 
     return `${month}월 ${day}일 ${timeform} ${hours}시`;
   };
+
+  if (loading) {
+    return <div>loading...</div>;
+  }
 
   return (
     <>

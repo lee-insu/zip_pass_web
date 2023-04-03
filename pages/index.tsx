@@ -21,6 +21,7 @@ import {RootState} from "../store/store";
 import {onAuthStateChanged} from "firebase/auth";
 import {auth} from "@/service/firebase";
 import {login, logout} from "@/store/userSlice";
+import {useAuth} from "@/hooks/useAuth";
 const getGuFormAddress = (address: string) => {
   const guIndex = address.indexOf("구");
   const seoulIndex = address.indexOf("서울시");
@@ -39,6 +40,7 @@ const getGuFormAddress = (address: string) => {
 };
 
 export default function Home() {
+  const {user, loading} = useAuth();
   const [posts, setPosts] = useState<IndexInfo[]>([]);
   const dispatch = useDispatch();
   const isLoggedIn = useSelector((state: RootState) => state.user);
@@ -93,6 +95,10 @@ export default function Home() {
       unsubscribe();
     };
   }, [dispatch]);
+
+  if (loading) {
+    return <div>Loading...</div>;
+  }
 
   return (
     <>
