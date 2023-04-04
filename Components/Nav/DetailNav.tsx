@@ -36,18 +36,25 @@ const DetailNav = () => {
       };
 
       if (bookmarkStatus) {
-        // 북마크가 활성화 된 경우, Firestore에서 문서를 삭제합니다.
         await deleteDoc(bookmarkRef);
       } else {
-        // 북마크가 비활성화 된 경우, Firestore에 문서를 추가합니다.
         await setDoc(bookmarkRef, bookmarkData);
       }
-
-      // 북마크 상태를 토글합니다.
       setBookmarkStatus(!bookmarkStatus);
     } else {
       router.push("/auth");
     }
+  };
+  const copyURL = () => {
+    let currentUrl = window.document.location.href;
+    let t = document.createElement("textarea");
+    document.body.appendChild(t);
+    t.value = currentUrl;
+    t.select();
+    document.execCommand("copy");
+    document.body.removeChild(t);
+
+    alert("링크가 복사되었습니다.");
   };
 
   const checkBookmark = async () => {
@@ -103,6 +110,7 @@ const DetailNav = () => {
             alt="공유하기"
             width={22}
             height={22}
+            onClick={copyURL}
           />
         </div>
       </div>

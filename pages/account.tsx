@@ -17,9 +17,7 @@ const Account = () => {
     try {
       await signOut(auth);
       dispatch(logout());
-    } catch (error) {
-      console.log("done");
-    }
+    } catch (error) {}
   };
 
   return (
@@ -41,7 +39,7 @@ const Account = () => {
               height={24}
             />
           </li>
-          <li className="flex justify-between text-lg font-medium text-gray-500">
+          {/* <li className="flex justify-between text-lg font-medium text-gray-500">
             <p>청년 재테크 알림</p>
             <Image
               src="/images/enter.svg"
@@ -49,7 +47,7 @@ const Account = () => {
               width={24}
               height={24}
             />
-          </li>
+          </li> */}
         </ul>
 
         <div className="mt-12 mb-9 space-y-0.5">
@@ -68,7 +66,7 @@ const Account = () => {
               height={24}
             />
           </li>
-          <li className="flex justify-between text-lg font-medium text-gray-500">
+          {/* <li className="flex justify-between text-lg font-medium text-gray-500">
             <p>이런 정책 필요해요</p>
             <Image
               src="/images/enter.svg"
@@ -76,8 +74,8 @@ const Account = () => {
               width={24}
               height={24}
             />
-          </li>
-          <li className="flex justify-between text-lg font-medium text-gray-500">
+          </li> */}
+          {/* <li className="flex justify-between text-lg font-medium text-gray-500">
             <p>도와주신 분들</p>
             <Image
               src="/images/enter.svg"
@@ -85,7 +83,7 @@ const Account = () => {
               width={24}
               height={24}
             />
-          </li>
+          </li> */}
         </ul>
 
         <div className="mt-12 mb-6 space-y-0.5">
