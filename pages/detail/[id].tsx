@@ -45,7 +45,9 @@ const Detail = ({NoticeData}: DetailProps) => {
   };
 
   if (loading) {
-    return <div>loading...</div>;
+    return (
+      <div className="w-full text-center font-bold">정보 불러오는 중...</div>
+    );
   }
 
   return (

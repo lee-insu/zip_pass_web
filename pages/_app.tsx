@@ -17,11 +17,6 @@ export default function App({Component, pageProps}: AppProps) {
       <Head>
         <title></title>
         <meta name="viewport" content="initial-scale=1.0, width=device-width" />
-
-        <script
-          src="https://developers.kakao.com/sdk/js/kakao.js"
-          defer
-        ></script>
       </Head>
       <Provider store={store}>
         <div className={styles.container}>

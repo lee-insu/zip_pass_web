@@ -8,10 +8,15 @@ import {GoogleAuthProvider, signInWithPopup, signOut} from "firebase/auth";
 import {useSelector} from "react-redux";
 import {RootState} from "../store/store";
 import Link from "next/link";
+import {useRouter} from "next/router";
+import {cpSync} from "fs";
+import {useAuth} from "@/hooks/useAuth";
 
 const Account = () => {
+  const {user, loading} = useAuth();
   const dispatch = useDispatch();
   const isLoggedIn = useSelector((state: RootState) => state.user.isLoggedIn);
+  const router = useRouter();
 
   const signOutUser = async () => {
     try {
@@ -20,13 +25,27 @@ const Account = () => {
     } catch (error) {}
   };
 
+  const loginStatus = () => {
+    if (isLoggedIn) {
+      router.push("/personal");
+    } else {
+      router.push("/auth");
+    }
+  };
+
+  if (loading) {
+    return (
+      <div className="w-full text-center font-bold">정보 불러오는 중...</div>
+    );
+  }
+
   return (
     <>
       <AccountNav />
       <div className="w-[88%] m-auto">
         <div className="my-9 space-y-0.5">
           <div className="text-xl font-semibold text-gray-700">
-            이인수님을 위한 공고 알림{" "}
+            여러분을 위한 공고 알림{" "}
           </div>
         </div>
         <ul className="space-y-8 h-full w-full">
@@ -39,15 +58,18 @@ const Account = () => {
               height={24}
             />
           </li>
-          {/* <li className="flex justify-between text-lg font-medium text-gray-500">
-            <p>청년 재테크 알림</p>
+          <li
+            onClick={loginStatus}
+            className="flex justify-between text-lg font-medium text-gray-500"
+          >
+            <p>나의 맞춤 공고 설정</p>
             <Image
               src="/images/enter.svg"
               alt="들어가기"
               width={24}
               height={24}
             />
-          </li> */}
+          </li>
         </ul>
 
         <div className="mt-12 mb-9 space-y-0.5">

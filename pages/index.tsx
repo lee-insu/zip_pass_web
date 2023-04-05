@@ -97,7 +97,9 @@ export default function Home() {
   }, [dispatch]);
 
   if (loading) {
-    return <div>Loading...</div>;
+    return (
+      <div className="w-full text-center font-bold">정보 불러오는 중...</div>
+    );
   }
 
   return (
