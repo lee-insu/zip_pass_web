@@ -15,8 +15,6 @@ import exchangeArea from "@/utils/exchangeArea";
 import dateFormatter from "@/utils/dateFormat";
 import "@toast-ui/editor/dist/toastui-editor-viewer.css";
 import dynamic from "next/dynamic";
-import {useSelector} from "react-redux";
-import {RootState} from "@/store/store";
 import {useAuth} from "@/hooks/useAuth";
 
 interface DetailProps {
