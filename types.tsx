@@ -7,6 +7,12 @@ export interface IndexInfo {
   rent: number;
   area: number;
   exposure: boolean;
+  age: string;
+  welfare: string;
+  location: string;
+  car: string;
+  compete: number;
+  salary: string;
 }
 
 export interface DetailInfo {
@@ -19,6 +25,11 @@ export interface DetailInfo {
   area: number;
   url: string;
   detail: string;
+  age: string;
+  welfare: string;
+  location: string;
+  car: string;
+  compete: number;
 }
 
 export interface NotificationInfo {

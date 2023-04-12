@@ -112,7 +112,7 @@ const questions = [
     type: "choice",
     multiple: false,
     choices: [
-      "서울",
+      "서울시",
       "경기도",
       "충청도",
       "경상도",

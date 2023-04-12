@@ -26,6 +26,8 @@ import {onAuthStateChanged} from "firebase/auth";
 import {auth} from "@/service/firebase";
 import {login, logout} from "@/store/userSlice";
 import {useAuth} from "@/hooks/useAuth";
+import {calculateWinningProbability} from "@/utils/Score";
+
 const getGuFormAddress = (address: string) => {
   const guIndex = address.indexOf("구");
   const seoulIndex = address.indexOf("서울시");
@@ -48,7 +50,7 @@ export default function Home() {
   const [posts, setPosts] = useState<IndexInfo[]>([]);
   const dispatch = useDispatch();
   const userData = useSelector((state: RootState) => state.user);
-
+  const [additionalDataFetched, setAdditionalDataFetched] = useState(false);
   console.log(userData);
 
   useEffect(() => {
@@ -76,6 +78,12 @@ export default function Home() {
             rent: data.rent,
             area: data.area,
             exposure: data.exposure,
+            age: data?.age,
+            welfare: data?.welfare,
+            location: data?.location,
+            car: data?.car,
+            compete: data?.compete,
+            salary: data?.salary,
           };
         })
         .sort(
@@ -120,6 +128,7 @@ export default function Home() {
           };
 
           dispatch(updateAdditionalUserData(additionalData));
+          setAdditionalDataFetched(true);
         }
       }
     };
@@ -152,46 +161,69 @@ export default function Home() {
             </div>
 
             <ul className="space-y-5 h-full w-full">
-              {posts.map((post) => (
-                <li key={post.id}>
-                  <Link
-                    className="rounded-xl border-gray-100  bg-white drop-shadow-md
-                    h-160 flex items-center"
-                    href={`detail/${post.id}`}
-                  >
-                    <div className="rounded-lg w-24 h-32 bg-[#1F2526] m-4 ">
-                      <div className="flex flex-col justify-center items-center h-full">
-                        <p className="font-medium text-sm text-white">마감일</p>
-                        <p className="font-semibold text-3xl text-white">
-                          {dateFormatter(post.deadline_at).month}월
-                        </p>
-                        <p className="font-semibold text-3xl text-white">
-                          {dateFormatter(post.deadline_at).day}일
-                        </p>
+              {posts.map((post) => {
+                let winningProbability;
+
+                if (userData.isLoggedIn && additionalDataFetched) {
+                  winningProbability = calculateWinningProbability({
+                    welfare: post.welfare,
+                    location: post.location,
+                    salary: post.salary,
+                    compete: post.compete,
+                    userData: {
+                      welfare: userData.userData?.welfare ?? null,
+                      location: userData.userData?.location ?? null,
+                      salary: userData.userData?.salary ?? null,
+                    },
+                  });
+                }
+
+                return (
+                  <li key={post.id}>
+                    <Link
+                      className="rounded-xl border-gray-100  bg-white drop-shadow-md
+                h-160 flex items-center"
+                      href={`detail/${post.id}`}
+                    >
+                      <div className="rounded-lg w-24 h-32 bg-[#1F2526] m-4 ">
+                        <div className="flex flex-col justify-center items-center h-full">
+                          <p className="font-medium text-sm text-white">
+                            마감일
+                          </p>
+                          <p className="font-semibold text-3xl text-white">
+                            {dateFormatter(post.deadline_at).month}월
+                          </p>
+                          <p className="font-semibold text-3xl text-white">
+                            {dateFormatter(post.deadline_at).day}일
+                          </p>
+                        </div>
                       </div>
-                    </div>
-                    <div className="flex flex-col justify-start">
-                      <p className="text-xl font-bold text-[#1BC378]">
-                        당첨 확률
-                      </p>
-                      <div className="pt-1.5">
-                        <p className="text-base text-[#526466]">
-                          {getGuFormAddress(post.address)}
+                      <div className="flex flex-col justify-start">
+                        <p className="text-xl font-bold text-[#1BC378]">
+                          당첨 확률:{" "}
+                          {winningProbability
+                            ? `${winningProbability.toFixed(2)}%`
+                            : "미정"}
                         </p>
-                        <p className="text-base text-[#526466]">
-                          보증금 {convertToMoneyFormat(post.deposit)}원
-                        </p>
-                        <p className="text-base text-[#526466]">
-                          월세 {convertToMoneyFormat(post.rent)}원
-                        </p>
-                        <p className="text-[#526466] text-sm">
-                          {post.category}
-                        </p>
+                        <div className="pt-1.5">
+                          <p className="text-base text-[#526466]">
+                            {getGuFormAddress(post.address)}
+                          </p>
+                          <p className="text-base text-[#526466]">
+                            보증금 {convertToMoneyFormat(post.deposit)}원
+                          </p>
+                          <p className="text-base text-[#526466]">
+                            월세 {convertToMoneyFormat(post.rent)}원
+                          </p>
+                          <p className="text-[#526466] text-sm">
+                            {post.category}
+                          </p>
+                        </div>
                       </div>
-                    </div>
-                  </Link>
-                </li>
-              ))}
+                    </Link>
+                  </li>
+                );
+              })}
             </ul>
           </div>
         </div>

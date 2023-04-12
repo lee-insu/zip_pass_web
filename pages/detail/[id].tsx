@@ -1,13 +1,7 @@
-import React, {use, useRef, useState} from "react";
+import React from "react";
 import {GetServerSideProps} from "next";
 import DetailNav from "@/Components/Nav/DetailNav";
-import {
-  collection,
-  getDocs,
-  getFirestore,
-  doc,
-  getDoc,
-} from "firebase/firestore";
+import {getFirestore, doc, getDoc} from "firebase/firestore";
 import {app} from "@/service/firebase";
 import {DetailInfo} from "@/types";
 import convertToMoneyFormat from "@/utils/moneyFormat";
@@ -139,6 +133,11 @@ export const getServerSideProps: GetServerSideProps<DetailProps> = async (
     area: detailInfo.area,
     url: detailInfo.url,
     detail: detailInfo.detail,
+    age: detailInfo?.age,
+    welfare: detailInfo?.welfare,
+    location: detailInfo?.location,
+    car: detailInfo?.car,
+    compete: detailInfo?.compete,
   };
 
   return {

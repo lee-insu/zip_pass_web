@@ -1,22 +1,56 @@
-export const calculateScore = (
-  welfare: string,
-  address: string,
-  salary: string
-) => {
-  const welfareScore =
-    welfare === "차상위계층" ? 5 : welfare === "한부모가족" ? 5 : 0;
-  const addressScore = address === "A" ? 5 : 1;
-  const salaryScore = salary === "200만 이하" ? 3 : 1;
-
-  return welfareScore + addressScore + salaryScore;
+type WinningProbabilityParams = {
+  welfare: string | null;
+  location: string | null;
+  salary: string | null;
+  compete: number | null;
+  userData: {
+    welfare: string | null;
+    location: string | null;
+    salary: string | null;
+  };
 };
 
-export const calculateProbability = (totalScore: number) => {
-  // 경쟁률을 반영한 확률 계산 (실제 상황에서는 이 값이 사용자들의 점수 분포와 당첨되기 위한 기준에 따라 달라집니다)
-  const competitionRate = 5; // 임의의 경쟁률 값
-  const maxScore = 13; // 복지(5) + 주소지(5) + 월급(3)
-  const userProbability =
-    (maxScore - totalScore) / (maxScore * competitionRate);
+export const calculateWinningProbability = ({
+  welfare,
+  location,
+  salary,
+  compete,
+  userData,
+}: WinningProbabilityParams): number | null => {
+  if (!welfare || !location || !salary || !compete) return null;
 
-  return userProbability;
+  let score = 0;
+
+  if (welfare === "있음") {
+    if (
+      userData.welfare === "차상위계층" ||
+      userData.welfare === "한부모가족" ||
+      userData.welfare === "수급자가족"
+    ) {
+      score += 5;
+    }
+  }
+
+  if (location === "서울시") {
+    if (userData.location === "서울시") {
+      score += 3;
+    }
+  } else if (location === "지방") {
+    if (userData.location && userData.location !== "서울시") {
+      score += 3;
+    }
+  }
+
+  if (salary === "200만원 이하" || salary === "100만원 미만") {
+    if (
+      userData.salary === "200만원 이하" ||
+      userData.salary === "100만원 미만"
+    ) {
+      score += 2;
+    }
+  }
+
+  const winningProbability = (score / (score + compete)) * 100;
+
+  return winningProbability;
 };
