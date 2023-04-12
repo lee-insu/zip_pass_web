@@ -66,11 +66,11 @@ const questions = [
     choices: [
       "없음",
       "오백만원 이하",
-      "일천 만원 이하",
-      "2천 만원 이하",
-      "4천 만원 이하",
-      "6천 만원 이하",
-      "8천 만원 이하",
+      "1천만원 이하",
+      "2천만원 이하",
+      "4천만원 이하",
+      "6천만원 이하",
+      "8천만원 이하",
       "1억원 이하",
       "1억 2천만원 이하",
       "1억 4천만원 이하",
@@ -122,6 +122,30 @@ const questions = [
     ],
   },
   {
+    questionText: "현재 해당하는 것이 있나요?",
+    type: "choice",
+    multiple: false,
+    choices: ["수급자가족", "한부모가족", "차상위계층", "해당없음(잘 모름)"],
+  },
+  {
+    questionText: "월소득이 얼마인가요?",
+    type: "choice",
+    multiple: false,
+    choices: [
+      "없음",
+      "100만원 미만",
+      "200만원 이하",
+      "300만원 이하",
+      "400만원 이하",
+    ],
+  },
+  {
+    questionText: "나의 현재 직업은 무엇인가요?",
+    type: "choice",
+    multiple: false,
+    choices: ["없음", "대학생", "취업준비생", "사회초년생"],
+  },
+  {
     questionText: "내 소유의 차가 있나요?",
     type: "choice",
     multiple: false,
@@ -155,6 +179,9 @@ const Personal: React.FC = () => {
     area?: string;
     room?: string;
     live?: string;
+    welfare?: string;
+    salary?: string;
+    job?: string;
     car?: string;
   }>({});
 
@@ -202,6 +229,9 @@ const Personal: React.FC = () => {
       "area",
       "room",
       "live",
+      "welfare",
+      "salary",
+      "job",
       "car",
       "yes",
     ];

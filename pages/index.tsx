@@ -8,10 +8,14 @@ import {
   getFirestore,
   collection,
   getDocs,
+  getDoc,
+  doc,
   Timestamp,
   query,
   where,
 } from "firebase/firestore";
+import {updateAdditionalUserData} from "@/store/userSlice";
+import {UserData} from "@/store/userSlice";
 import {app} from "@/service/firebase";
 import {useEffect, useState} from "react";
 import convertToMoneyFormat from "@/utils/moneyFormat";
@@ -43,9 +47,9 @@ export default function Home() {
   const {user, loading} = useAuth();
   const [posts, setPosts] = useState<IndexInfo[]>([]);
   const dispatch = useDispatch();
-  const isLoggedIn = useSelector((state: RootState) => state.user);
+  const userData = useSelector((state: RootState) => state.user);
 
-  console.log(isLoggedIn);
+  console.log(userData);
 
   useEffect(() => {
     const db = getFirestore(app);
@@ -91,10 +95,39 @@ export default function Home() {
         dispatch(logout());
       }
     });
+
+    const fetchAdditionalData = async () => {
+      if (userData.isLoggedIn && userData.userData?.uid) {
+        const db = getFirestore(app);
+        const userDocRef = doc(db, "users", userData.userData.uid);
+        const userDoc = await getDoc(userDocRef);
+
+        if (userDoc.exists()) {
+          const additionalData: Partial<UserData> = {
+            age: userDoc.data().age,
+            location: userDoc.data().location,
+            house: userDoc.data().house,
+            contract: userDoc.data().contract,
+            deposit: userDoc.data().deposit,
+            monthly: userDoc.data().monthly,
+            area: userDoc.data().area,
+            room: userDoc.data().room,
+            live: userDoc.data().live,
+            welfare: userDoc.data().welfare,
+            salary: userDoc.data().salary,
+            job: userDoc.data().job,
+            car: userDoc.data().car,
+          };
+
+          dispatch(updateAdditionalUserData(additionalData));
+        }
+      }
+    };
+    fetchAdditionalData();
     return () => {
       unsubscribe();
     };
-  }, [dispatch]);
+  }, [dispatch, userData.isLoggedIn, userData.userData?.uid]);
 
   if (loading) {
     return (

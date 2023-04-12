@@ -1,10 +1,23 @@
 import {createSlice, PayloadAction} from "@reduxjs/toolkit";
 
-interface UserData {
+export interface UserData {
   uid: string;
   displayName: string | null;
   email: string | null;
   photoURL: string | null;
+  age?: number;
+  location?: string;
+  house?: string;
+  contract?: string;
+  deposit?: string;
+  monthly?: string;
+  area?: string;
+  room?: string;
+  live?: string;
+  welfare?: string;
+  salary?: string;
+  job?: string;
+  car?: string;
 }
 
 interface UserState {
@@ -34,9 +47,20 @@ export const userSlice = createSlice({
       state.isLoggedIn = false;
       state.userData = null;
     },
+    updateAdditionalUserData: (
+      state,
+      action: PayloadAction<Partial<UserData>>
+    ) => {
+      if (state.userData) {
+        state.userData = {
+          ...state.userData,
+          ...action.payload,
+        };
+      }
+    },
   },
 });
 
-export const {login, logout} = userSlice.actions;
+export const {login, logout, updateAdditionalUserData} = userSlice.actions;
 
 export default userSlice.reducer;
