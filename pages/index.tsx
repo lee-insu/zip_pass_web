@@ -176,6 +176,9 @@ export default function Home() {
                       salary: userData.userData?.salary ?? null,
                     },
                   });
+                  if (winningProbability !== null) {
+                    winningProbability = Math.round(winningProbability);
+                  }
                 }
 
                 return (
@@ -202,7 +205,7 @@ export default function Home() {
                         <p className="text-xl font-bold text-[#1BC378]">
                           당첨 확률:{" "}
                           {winningProbability
-                            ? `${winningProbability.toFixed(2)}%`
+                            ? `${winningProbability}%`
                             : "미정"}
                         </p>
                         <div className="pt-1.5">

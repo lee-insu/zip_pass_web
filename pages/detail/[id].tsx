@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useEffect, useState} from "react";
 import {GetServerSideProps} from "next";
 import DetailNav from "@/Components/Nav/DetailNav";
 import {getFirestore, doc, getDoc} from "firebase/firestore";
@@ -10,20 +10,30 @@ import dateFormatter from "@/utils/dateFormat";
 import "@toast-ui/editor/dist/toastui-editor-viewer.css";
 import dynamic from "next/dynamic";
 import {useAuth} from "@/hooks/useAuth";
+import {useDispatch, useSelector} from "react-redux";
+import {RootState} from "@/store/store";
+import {calculateWinningProbability} from "@/utils/Score";
+import {UserData} from "@/store/userSlice";
+import {updateAdditionalUserData} from "@/store/userSlice";
 
 interface DetailProps {
   NoticeData: DetailInfo;
 }
 
 const Detail = ({NoticeData}: DetailProps) => {
+  const dispatch = useDispatch();
   const {user, loading} = useAuth();
+  const userData = useSelector((state: RootState) => state.user);
+  const [winningProbability, setWinningProbability] = useState<number | null>(
+    null
+  );
+  const [additionalDataFetched, setAdditionalDataFetched] = useState(false);
   const Viewer = dynamic(
     () => import("@toast-ui/react-editor").then((mod) => mod.Viewer),
     {
       ssr: false,
     }
   );
-  const percent = 80;
 
   const timeFormat = (date: string) => {
     const DateInfo = new Date(date);
@@ -35,6 +45,61 @@ const Detail = ({NoticeData}: DetailProps) => {
 
     return `${month}월 ${day}일 ${timeform} ${hours}시`;
   };
+
+  useEffect(() => {
+    if (userData.isLoggedIn && userData.userData) {
+      const calculatedProbability = calculateWinningProbability({
+        welfare: NoticeData.welfare,
+        location: NoticeData.location,
+        salary: NoticeData.salary,
+        compete: NoticeData.compete,
+        userData: {
+          welfare: userData.userData?.welfare ?? null,
+          location: userData.userData?.location ?? null,
+          salary: userData.userData?.salary ?? null,
+        },
+      });
+      setWinningProbability(
+        calculatedProbability ? Math.round(calculatedProbability) : null
+      );
+    }
+    if (user) {
+      const fetchAdditionalData = async () => {
+        if (userData.isLoggedIn && userData.userData?.uid) {
+          const db = getFirestore(app);
+          const userDocRef = doc(db, "users", userData.userData.uid);
+          const userDoc = await getDoc(userDocRef);
+
+          if (userDoc.exists()) {
+            const additionalData: Partial<UserData> = {
+              age: userDoc.data().age,
+              location: userDoc.data().location,
+              house: userDoc.data().house,
+              contract: userDoc.data().contract,
+              deposit: userDoc.data().deposit,
+              monthly: userDoc.data().monthly,
+              area: userDoc.data().area,
+              room: userDoc.data().room,
+              live: userDoc.data().live,
+              welfare: userDoc.data().welfare,
+              salary: userDoc.data().salary,
+              job: userDoc.data().job,
+              car: userDoc.data().car,
+            };
+
+            dispatch(updateAdditionalUserData(additionalData));
+            setAdditionalDataFetched(true);
+          }
+        }
+      };
+      fetchAdditionalData();
+    }
+  }, [
+    dispatch,
+    userData.isLoggedIn,
+    userData.userData?.uid,
+    additionalDataFetched,
+  ]);
 
   if (loading) {
     return (
@@ -58,13 +123,27 @@ const Detail = ({NoticeData}: DetailProps) => {
         <div className="mb-9">
           <div className="text-xl font-bold mb-2">당첨 확률</div>
           <div className="relative w-full h-4 bg-gray-300 rounded-full overflow-hidden">
-            <div
-              className="absolute rounded-full inset-0 bg-green-500"
-              style={{width: `${percent}%`}}
-            ></div>
-            <div className="absolute inset-0 text-gray-600 text-center flex items-center justify-center">
-              {percent}%
-            </div>
+            {winningProbability !== null ? (
+              <>
+                <div
+                  className="absolute rounded-full inset-0 bg-green-500"
+                  style={{width: `${winningProbability}%`}}
+                ></div>
+                <div className="absolute inset-0 text-gray-600 text-center flex items-center justify-center">
+                  {winningProbability}%
+                </div>
+              </>
+            ) : (
+              <>
+                <div
+                  className="absolute rounded-full inset-0 bg-green-500"
+                  style={{width: `0%`}}
+                ></div>
+                <div className="absolute inset-0 text-gray-600 text-center flex items-center justify-center">
+                  로그인 후 개인 정보를 입력하세요
+                </div>
+              </>
+            )}
           </div>
         </div>
       </div>
@@ -138,6 +217,7 @@ export const getServerSideProps: GetServerSideProps<DetailProps> = async (
     location: detailInfo?.location,
     car: detailInfo?.car,
     compete: detailInfo?.compete,
+    salary: detailInfo?.salary,
   };
 
   return {

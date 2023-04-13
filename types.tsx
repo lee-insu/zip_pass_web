@@ -30,6 +30,7 @@ export interface DetailInfo {
   location: string;
   car: string;
   compete: number;
+  salary: string;
 }
 
 export interface NotificationInfo {
