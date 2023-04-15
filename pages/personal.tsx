@@ -308,7 +308,7 @@ const Personal: React.FC = () => {
                 max:
                   parseInt(answer.split(",")[1]) || currentQuestion.max || 30,
               }}
-              onChange={(value) => setAnswer(`${value.min},${value.max}`)}
+              onChange={(value: any) => setAnswer(`${value.min},${value.max}`)}
             />
           </div>
         </div>
