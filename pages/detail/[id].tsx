@@ -15,6 +15,7 @@ import {RootState} from "@/store/store";
 import {calculateWinningProbability} from "@/utils/Score";
 import {UserData} from "@/store/userSlice";
 import {updateAdditionalUserData} from "@/store/userSlice";
+import Link from "next/link";
 
 interface DetailProps {
   NoticeData: DetailInfo;
@@ -135,13 +136,27 @@ const Detail = ({NoticeData}: DetailProps) => {
               </>
             ) : (
               <>
-                <div
-                  className="absolute rounded-full inset-0 bg-green-500"
-                  style={{width: `0%`}}
-                ></div>
-                <div className="absolute inset-0 text-gray-600 text-center flex items-center justify-center">
-                  로그인 후 개인 정보를 입력하세요
-                </div>
+                {userData.isLoggedIn ? (
+                  <Link href="/personal">
+                    <div
+                      className="absolute rounded-full inset-0 bg-green-500"
+                      style={{width: `0%`}}
+                    ></div>
+                    <div className="absolute inset-0 text-gray-600 text-center flex items-center justify-center">
+                      내 정보 입력하고 당첨확률 확인
+                    </div>
+                  </Link>
+                ) : (
+                  <Link href="/auth">
+                    <div
+                      className="absolute rounded-full inset-0 bg-green-500"
+                      style={{width: `0%`}}
+                    ></div>
+                    <div className="absolute inset-0 text-gray-600 text-center flex items-center justify-center">
+                      당첨확률이 궁금하다면 클릭
+                    </div>
+                  </Link>
+                )}
               </>
             )}
           </div>

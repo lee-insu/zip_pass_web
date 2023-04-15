@@ -49,7 +49,7 @@ const Account = () => {
           </div>
         </div>
         <ul className="space-y-8 h-full w-full">
-          <li className="flex justify-between text-lg font-medium text-gray-500">
+          {/* <li className="flex justify-between text-lg font-medium text-gray-500">
             <p>공고 유형별 알림</p>
             <Image
               src="/images/enter.svg"
@@ -57,12 +57,12 @@ const Account = () => {
               width={24}
               height={24}
             />
-          </li>
+          </li> */}
           <li
             onClick={loginStatus}
             className="flex justify-between text-lg font-medium text-gray-500"
           >
-            <p>나의 맞춤 공고 설정</p>
+            <p>내 상황에 맞는 집 찾기</p>
             <Image
               src="/images/enter.svg"
               alt="들어가기"

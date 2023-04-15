@@ -41,8 +41,15 @@ export const calculateWinningProbability = ({
     }
   }
 
-  if (salary === "200만원 이하" || salary === "100만원 미만") {
+  if (
+    salary === "400만원 이하" ||
+    salary === "300만원 이하" ||
+    salary === "200만원 이하" ||
+    salary === "100만원 미만"
+  ) {
     if (
+      userData.salary === "400만원 이하" ||
+      userData.salary === "300만원 이하" ||
       userData.salary === "200만원 이하" ||
       userData.salary === "100만원 미만"
     ) {

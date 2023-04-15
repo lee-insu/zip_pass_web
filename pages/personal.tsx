@@ -244,7 +244,6 @@ const Personal: React.FC = () => {
       setAnswer("");
       setCurrentQuestionIndex(currentQuestionIndex + 1);
     } else {
-      // 마지막 질문에 대한 응답을 수집하고 Firestore에 저장
       const key = questionKeys[currentQuestionIndex];
       setCollectedAnswers((prev) => ({...prev, [key]: answer}));
 
@@ -324,7 +323,6 @@ const Personal: React.FC = () => {
       const selectedChoices = answer
         ? answer.split(",").filter((c) => c !== "")
         : [];
-      console.log(selectedChoices, answer);
     }
   }, [answer, currentQuestionIndex]);
 
