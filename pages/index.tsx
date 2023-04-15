@@ -52,7 +52,6 @@ export default function Home() {
   const dispatch = useDispatch();
   const userData = useSelector((state: RootState) => state.user);
   const [additionalDataFetched, setAdditionalDataFetched] = useState(false);
-  console.log(userData);
 
   useEffect(() => {
     const db = getFirestore(app);
@@ -151,7 +150,7 @@ export default function Home() {
         <title>집패스</title>
         <meta name="description" content="서울에서 저렴하게 내 집 찾기" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
-        <link rel="icon" href="/favicon.ico" />
+        <link rel="icon" href="/zip_pass.ico" />
       </Head>
       <>
         <HomeNav />
