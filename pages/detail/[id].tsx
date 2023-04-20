@@ -1,7 +1,13 @@
 import React, {useEffect, useState} from "react";
-import {GetServerSideProps} from "next";
+import {GetServerSideProps, GetStaticPaths, GetStaticProps} from "next";
 import DetailNav from "@/Components/Nav/DetailNav";
-import {getFirestore, doc, getDoc} from "firebase/firestore";
+import {
+  getFirestore,
+  doc,
+  getDoc,
+  collection,
+  getDocs,
+} from "firebase/firestore";
 import {app} from "@/service/firebase";
 import {DetailInfo} from "@/types";
 import convertToMoneyFormat from "@/utils/moneyFormat";
@@ -16,12 +22,14 @@ import {calculateWinningProbability} from "@/utils/Score";
 import {UserData} from "@/store/userSlice";
 import {updateAdditionalUserData} from "@/store/userSlice";
 import Link from "next/link";
+import {useRouter} from "next/router";
 
 interface DetailProps {
   NoticeData: DetailInfo;
 }
 
 const Detail = ({NoticeData}: DetailProps) => {
+  const router = useRouter();
   const dispatch = useDispatch();
   const {user, loading} = useAuth();
   const userData = useSelector((state: RootState) => state.user);
@@ -102,7 +110,7 @@ const Detail = ({NoticeData}: DetailProps) => {
     additionalDataFetched,
   ]);
 
-  if (loading) {
+  if (router.isFallback || loading) {
     return (
       <div className="w-full text-center font-bold">정보 불러오는 중...</div>
     );
@@ -200,9 +208,7 @@ const Detail = ({NoticeData}: DetailProps) => {
 
 export default Detail;
 
-export const getServerSideProps: GetServerSideProps<DetailProps> = async (
-  context
-) => {
+export const getStaticProps: GetStaticProps<DetailProps> = async (context) => {
   const id = context.params?.id as string;
 
   const firestore = getFirestore(app);
@@ -237,5 +243,61 @@ export const getServerSideProps: GetServerSideProps<DetailProps> = async (
 
   return {
     props: {NoticeData},
+    revalidate: 60,
   };
 };
+
+export const getStaticPaths: GetStaticPaths = async () => {
+  const firestore = getFirestore(app);
+  const houseInfoQuery = collection(firestore, "house_info");
+  const houseInfoSnapshots = await getDocs(houseInfoQuery);
+
+  const paths = houseInfoSnapshots.docs.map((doc) => ({
+    params: {id: doc.id},
+  }));
+
+  return {
+    paths,
+    fallback: true,
+  };
+};
+
+// export const getServerSideProps: GetServerSideProps<DetailProps> = async (
+//   context
+// ) => {
+//   const id = context.params?.id as string;
+
+//   const firestore = getFirestore(app);
+//   const houseInfoRef = doc(firestore, "house_info", id);
+//   const docSnap = await getDoc(houseInfoRef);
+
+//   if (!docSnap.exists()) {
+//     return {
+//       notFound: true,
+//     };
+//   }
+
+//   const detailInfo = docSnap.data() as DetailInfo;
+
+//   let NoticeData: DetailInfo = {
+//     started_at: detailInfo.started_at.toString(),
+//     deadline_at: detailInfo.deadline_at.toString(),
+//     address: detailInfo.address,
+//     category: detailInfo.category,
+//     deposit: detailInfo.deposit,
+//     rent: detailInfo.rent,
+//     area: detailInfo.area,
+//     url: detailInfo.url,
+//     detail: detailInfo.detail,
+//     age: detailInfo?.age,
+//     welfare: detailInfo?.welfare,
+//     location: detailInfo?.location,
+//     car: detailInfo?.car,
+//     compete: detailInfo?.compete,
+//     salary: detailInfo?.salary,
+//   };
+
+//   return {
+//     props: {NoticeData},
+//   };
+// };

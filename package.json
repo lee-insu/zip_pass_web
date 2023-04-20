@@ -6,9 +6,11 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "export": "next export"
   },
   "dependencies": {
+    "@firebase/app": "^0.9.8",
     "@reduxjs/toolkit": "^1.9.3",
     "@toast-ui/editor": "^3.2.2",
     "@toast-ui/react-editor": "^3.2.3",
@@ -20,7 +22,7 @@
     "eslint": "8.34.0",
     "eslint-config-next": "13.2.1",
     "firebase": "^9.17.1",
-    "firebase-tools": "^11.27.0",
+    "firebase-admin": "^11.7.0",
     "next": "13.2.1",
     "react": "18.2.0",
     "react-dom": "18.2.0",
