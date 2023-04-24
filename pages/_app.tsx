@@ -15,8 +15,10 @@ export default function App({Component, pageProps}: AppProps) {
   return (
     <>
       <Head>
-        <title></title>
-        <meta name="viewport" content="initial-scale=1.0, width=device-width" />
+        <title>집패스-서울에서 저렴하게 살기</title>
+        <meta name="description" content="서울에서 저렴하게 내 집 찾기" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <link rel="icon" href="/zip_pass.ico" />
       </Head>
       <Provider store={store}>
         <div className={styles.container}>

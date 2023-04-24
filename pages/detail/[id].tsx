@@ -23,6 +23,7 @@ import {UserData} from "@/store/userSlice";
 import {updateAdditionalUserData} from "@/store/userSlice";
 import Link from "next/link";
 import {useRouter} from "next/router";
+import Head from "next/head";
 
 interface DetailProps {
   NoticeData: DetailInfo;

@@ -1,6 +1,7 @@
-import React, {useEffect} from "react";
+import React, {useEffect, useState} from "react";
 import {useRouter} from "next/router";
 import {
+  signInWithEmailAndPassword,
   GoogleAuthProvider,
   signInWithPopup,
   UserCredential,
@@ -12,8 +13,12 @@ import {RootState} from "../store/store";
 import {useDispatch} from "react-redux";
 import {login, logout} from "@/store/userSlice";
 import Image from "next/image";
+import Link from "next/link";
 
 const Auth = () => {
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+
   const router = useRouter();
   const dispatch = useDispatch();
   const isLoggedIn = useSelector((state: RootState) => state.user.isLoggedIn);
@@ -29,6 +34,32 @@ const Auth = () => {
         email: userCredential.user.email,
         photoURL: userCredential.user.photoURL,
       });
+    }
+  };
+
+  const handleEmailLogin = async () => {
+    try {
+      const userCredential = await signInWithEmailAndPassword(
+        auth,
+        email,
+        password
+      );
+      try {
+        await addUserToFirestore(userCredential);
+      } catch (error) {
+        console.error("Error adding user to Firestore: ", error);
+      }
+      dispatch(
+        login({
+          uid: userCredential.user.uid,
+          displayName: userCredential.user.displayName || "",
+          email: userCredential.user.email || "",
+          photoURL: userCredential.user.photoURL || "",
+        })
+      );
+      router.push("/");
+    } catch (error) {
+      console.error("Error signing in with email: ", error);
     }
   };
 
@@ -78,6 +109,35 @@ const Auth = () => {
         className="flex-1 flex items-center justify-center"
         style={{marginTop: "calc(10% - 15rem)"}}
       >
+        <div className="w-full max-w-md p-4">
+          <input
+            type="email"
+            placeholder="이메일"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            className="w-full mb-4 p-2 border border-gray-300 rounded-md"
+          />
+          <input
+            type="password"
+            placeholder="비밀번호"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            className="w-full mb-4 p-2 border border-gray-300 rounded-md"
+          />
+          <button
+            onClick={handleEmailLogin}
+            className="w-full mb-4 p-2 bg-blue-500 text-white rounded-md"
+          >
+            이메일로 로그인
+          </button>
+        </div>
+
+        <div className="w-full max-w-md p-4">
+          <Link href="/signup">
+            <div className="text-blue-500">회원가입하기</div>
+          </Link>
+        </div>
+
         <div className="w-full max-w-md p-4">
           <button
             onClick={signInWithGoogle}

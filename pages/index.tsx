@@ -1,6 +1,4 @@
 import HomeNav from "@/Components/Nav/HomeNav";
-import Head from "next/head";
-import Image from "next/image";
 import Link from "next/link";
 import styles from "../styles/Index.module.css";
 import {IndexInfo} from "@/types";
@@ -146,12 +144,6 @@ export default function Home() {
 
   return (
     <>
-      <Head>
-        <title>집패스</title>
-        <meta name="description" content="서울에서 저렴하게 내 집 찾기" />
-        <meta name="viewport" content="width=device-width, initial-scale=1" />
-        <link rel="icon" href="/zip_pass.ico" />
-      </Head>
       <>
         <HomeNav />
         <div className={classNames(styles.container, "bg-[#F6F8FA]")}>
