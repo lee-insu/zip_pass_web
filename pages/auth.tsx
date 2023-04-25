@@ -14,6 +14,8 @@ import {useDispatch} from "react-redux";
 import {login, logout} from "@/store/userSlice";
 import Image from "next/image";
 import Link from "next/link";
+import {toast} from "react-toastify";
+import {ToastContainer} from "react-toastify";
 
 const Auth = () => {
   const [email, setEmail] = useState("");
@@ -46,8 +48,18 @@ const Auth = () => {
       );
       try {
         await addUserToFirestore(userCredential);
-      } catch (error) {
-        console.error("Error adding user to Firestore: ", error);
+      } catch (error: unknown) {
+        if (error instanceof Error) {
+          switch ((error as any).code) {
+            case "auth/network-request-failed":
+              toast.error("인터넷이 끊겼어요");
+              break;
+            default:
+              toast.error("로그인에 실패했어요.");
+          }
+        } else {
+          toast.error("로그인에 실패했어요.");
+        }
       }
       dispatch(
         login({
@@ -58,31 +70,21 @@ const Auth = () => {
         })
       );
       router.push("/");
-    } catch (error) {
-      console.error("Error signing in with email: ", error);
-    }
-  };
-
-  const signInWithGoogle = async () => {
-    const provider = new GoogleAuthProvider();
-    try {
-      const userCredential = await signInWithPopup(auth, provider);
-      try {
-        await addUserToFirestore(userCredential);
-      } catch (error) {
-        console.error("Error adding user to Firestore: ", error);
+    } catch (error: unknown) {
+      if (error instanceof Error) {
+        switch ((error as any).code) {
+          case "auth/user-not-found":
+            toast.error("가입된 이메일이 아니거나 틀렸어요");
+            break;
+          case "auth/wrong-password":
+            toast.error("비밀번호가 틀렸어요");
+            break;
+          default:
+            toast.error("로그인에 실패했어요.");
+        }
+      } else {
+        toast.error("로그인에 실패했어요.");
       }
-      dispatch(
-        login({
-          uid: userCredential.user.uid,
-          displayName: userCredential.user.displayName || "",
-          email: userCredential.user.email || "",
-          photoURL: userCredential.user.photoURL || "",
-        })
-      );
-      router.push("/");
-    } catch (error) {
-      console.error("Error signing in with Google: ", error);
     }
   };
 
@@ -96,21 +98,20 @@ const Auth = () => {
 
   return (
     <div className="w-full min-h-screen flex flex-col justify-between">
-      <div
-        className="flex-1 flex items-center justify-center"
-        style={{marginTop: "calc(10% - 10rem)"}}
-      >
+      <ToastContainer />
+      <div className="flex justify-center my-3">
+        <Image src="/images/logo.svg" alt="로고" width={180} height={60} />
+      </div>
+      <div className="flex justify-center">
         <div className="text-2xl font-bold text-center">집패스로</div>
         <div className="text-2xl font-light text-center">
           &nbsp;저렴하게 집 찾아요
         </div>
       </div>
-      <div
-        className="flex-1 flex items-center justify-center"
-        style={{marginTop: "calc(10% - 15rem)"}}
-      >
+      <div className="flex-1 flex items-start justify-center mt-12">
         <div className="w-full max-w-md p-4">
           <input
+            id="email"
             type="email"
             placeholder="이메일"
             value={email}
@@ -118,6 +119,7 @@ const Auth = () => {
             className="w-full mb-4 p-2 border border-gray-300 rounded-md"
           />
           <input
+            id="password"
             type="password"
             placeholder="비밀번호"
             value={password}
@@ -126,31 +128,18 @@ const Auth = () => {
           />
           <button
             onClick={handleEmailLogin}
-            className="w-full mb-4 p-2 bg-blue-500 text-white rounded-md"
+            className={`w-full mb-4 p-2 text-white rounded-md ${
+              email && password ? "bg-blue-500" : "bg-blue-300"
+            }`}
+            disabled={!email || !password}
           >
             이메일로 로그인
           </button>
-        </div>
-
-        <div className="w-full max-w-md p-4">
-          <Link href="/signup">
-            <div className="text-blue-500">회원가입하기</div>
-          </Link>
-        </div>
-
-        <div className="w-full max-w-md p-4">
-          <button
-            onClick={signInWithGoogle}
-            className="flex items-center justify-center w-full px-4 py-2 font-medium text-gray-700 bg-white border border-gray-300 rounded-md hover:bg-gray-100 focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-blue-500"
-          >
-            <Image
-              src="/images/google_logo.svg"
-              alt="Google Icon"
-              width={20}
-              height={20}
-            />
-            <span className="ml-4">구글 계정으로 로그인/가입</span>
-          </button>
+          <div className="w-full text-center">
+            <Link href="/term">
+              <div className="text-blue-500">회원가입하기</div>
+            </Link>
+          </div>
         </div>
       </div>
     </div>

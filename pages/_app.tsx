@@ -6,6 +6,7 @@ import {useRouter} from "next/router";
 import {Provider} from "react-redux";
 import {store} from "../store/store";
 import styles from "../styles/Home.module.css";
+import "react-toastify/dist/ReactToastify.css";
 
 export default function App({Component, pageProps}: AppProps) {
   const router = useRouter();
