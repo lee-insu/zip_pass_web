@@ -287,7 +287,7 @@ const Personal: React.FC = () => {
               onClick={() => handleChoiceChange(choice)}
               className={`block w-full p-2 text-left border border-gray-300 rounded-md ${
                 answer.indexOf(choice) !== -1
-                  ? "bg-green-500 text-white"
+                  ? "bg-[#007BFF] text-white"
                   : "text-gray-700"
               }`}
             >
@@ -351,7 +351,7 @@ const Personal: React.FC = () => {
         disabled={!answer}
         className={`mt-10 w-full p-2 font-medium rounded-md ${
           answer
-            ? "bg-green-500 text-white hover:bg-green-700"
+            ? "bg-[#007BFF] text-white hover:bg-[#0050A6]"
             : "bg-gray-300 text-gray-500"
         }`}
       >

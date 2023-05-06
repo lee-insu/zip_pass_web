@@ -136,7 +136,7 @@ const Detail = ({NoticeData}: DetailProps) => {
             {winningProbability !== null ? (
               <>
                 <div
-                  className="absolute rounded-full inset-0 bg-green-500"
+                  className="absolute rounded-full inset-0 bg-[#007BFF]"
                   style={{width: `${winningProbability}%`}}
                 ></div>
                 <div className="absolute inset-0 text-gray-600 text-center flex items-center justify-center">
@@ -171,7 +171,7 @@ const Detail = ({NoticeData}: DetailProps) => {
           </div>
         </div>
       </div>
-      <p className=" w-full h-[16px] bg-[#F2F4F6]"></p>
+      <p className=" w-full h-[16px] bg-[#F7F7F7]"></p>
       <div className="w-[88%] m-auto">
         <ul className="w-full h-full ">
           <li className="relative border-b border-gray-200 w-full h-20 flex items-center space-x-4">
@@ -198,7 +198,7 @@ const Detail = ({NoticeData}: DetailProps) => {
           </li>
         </ul>
       </div>
-      <p className=" w-full h-[16px] bg-[#F2F4F6]"></p>
+      <p className=" w-full h-[16px] bg-[#F7F7F7]"></p>
       <div className="w-[88%] m-auto">
         <div className="my-9 space-y-0.5"></div>
         <Viewer initialValue={NoticeData.detail || " "} />

@@ -146,7 +146,7 @@ export default function Home() {
     <>
       <>
         <HomeNav />
-        <div className={classNames(styles.container, "bg-[#F6F8FA]")}>
+        <div className={classNames(styles.container, "bg-[#fff]")}>
           <div className="w-[88%] m-auto">
             <div className="my-9">
               <div className="text-xl font-bold text-[#000]">공고 리스트</div>
@@ -176,11 +176,11 @@ export default function Home() {
                 return (
                   <li key={post.id}>
                     <Link
-                      className="rounded-xl border-gray-100  bg-white drop-shadow-md
+                      className="rounded-xl border-gray-200 border bg-white drop-shadow-sm
                 h-160 flex items-center"
                       href={`detail/${post.id}`}
                     >
-                      <div className="rounded-lg w-24 h-32 bg-[#1F2526] m-4 ">
+                      <div className="rounded-lg w-24 h-32 bg-[#007BFF] m-4 ">
                         <div className="flex flex-col justify-center items-center h-full">
                           <p className="font-medium text-sm text-white">
                             마감일
@@ -194,21 +194,21 @@ export default function Home() {
                         </div>
                       </div>
                       <div className="flex flex-col justify-start">
-                        <p className="text-xl font-bold text-[#1EC800]">
+                        <p className="text-xl font-semibold text-[#000DN]">
                           당첨 확률:{" "}
                           {winningProbability ? `${winningProbability}%` : "?"}
                         </p>
                         <div className="pt-1.5">
-                          <p className="text-base text-[#526466]">
+                          <p className="text-base text-[#444444]">
                             {getGuFormAddress(post.address)}
                           </p>
-                          <p className="text-base text-[#526466]">
+                          <p className="text-base text-[#444444]">
                             보증금 {convertToMoneyFormat(post.deposit)}원
                           </p>
-                          <p className="text-base text-[#526466]">
+                          <p className="text-base text-[#444444]">
                             월세 {convertToMoneyFormat(post.rent)}원
                           </p>
-                          <p className="text-[#526466] text-sm">
+                          <p className="text-[#444444] text-sm">
                             {post.category}
                           </p>
                         </div>
