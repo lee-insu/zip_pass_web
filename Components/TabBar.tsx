@@ -7,7 +7,7 @@ const TabBar = () => {
   const router = useRouter();
 
   return (
-    <nav className="fixed bottom-0 left-0 z-10 w-full h-[83px]">
+    <nav className="fixed bottom-0 left-0 z-10 w-full h-[64px]">
       <ul className="max-w-[820px] m-auto bg-white border-t-2 border-gray-100 bg-white flex justify-between">
         <Link className="tab-item w-1/2 h-[83px] bg-white" href={"/account"}>
           <li className="w-full pt-2 flex flex-col justify-center items-center">
