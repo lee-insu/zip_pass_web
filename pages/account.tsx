@@ -84,14 +84,20 @@ const Account = () => {
         </div>
 
         <ul className="space-y-8 h-full w-full">
-          <li className="flex justify-between text-lg font-medium text-gray-500">
-            <p>피드백 & 아이디어</p>
-            <Image
-              src="/images/enter.svg"
-              alt="들어가기"
-              width={24}
-              height={24}
-            />
+          <li>
+            <Link
+              className="flex justify-between text-lg font-medium text-gray-500"
+              href={"http://pf.kakao.com/_yxdidxj"}
+            >
+              <p>피드백 & 아이디어 (카톡 플친)</p>
+
+              <Image
+                src="/images/enter.svg"
+                alt="들어가기"
+                width={24}
+                height={24}
+              />
+            </Link>
           </li>
           {/* <li className="flex justify-between text-lg font-medium text-gray-500">
             <p>이런 정책 필요해요</p>

@@ -103,9 +103,8 @@ const Auth = () => {
         <Image src="/images/logo.svg" alt="로고" width={180} height={60} />
       </div>
       <div className="flex justify-center">
-        <div className="text-2xl font-bold text-center">집패스로</div>
         <div className="text-2xl font-light text-center">
-          &nbsp;저렴하게 집 찾아요
+          서울에서 30% 저렴하게 살아요
         </div>
       </div>
       <div className="flex-1 flex items-start justify-center mt-12">
@@ -133,11 +132,11 @@ const Auth = () => {
             }`}
             disabled={!email || !password}
           >
-            이메일로 로그인
+            로그인
           </button>
           <div className="w-full text-center">
             <Link href="/term">
-              <div className="text-blue-500">회원가입하기</div>
+              <div className="text-blue-500">회원가입</div>
             </Link>
           </div>
         </div>

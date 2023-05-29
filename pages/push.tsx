@@ -8,6 +8,13 @@ const Push = () => {
       <div className="w-[88%] m-auto">
         <div className="my-9 space-y-0.5">
           <div className="text-center text-xl font-semibold text-gray-700">
+            앱이 완성되면 알려드릴게요 🥹
+          </div>
+          <div className="text-center text-xl font-light text-gray-500">
+            현재 80% 완성 되었어요
+          </div>
+
+          {/* <div className="text-center text-xl font-semibold text-gray-700">
             알림을 받으려면 앱을 다운 받아야해요 🥹
           </div>
         </div>
@@ -21,7 +28,7 @@ const Push = () => {
               {" "}
               저는 애플이에요
             </li>
-          </ul>
+          </ul> */}
         </div>
       </div>
     </>
